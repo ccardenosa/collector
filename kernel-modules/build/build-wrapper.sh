@@ -10,6 +10,16 @@ KERNEL_SRC_DIR=""
 # shellcheck source=/dev/null
 source "/scripts/build-kos"
 
+download_bundle() {
+    local kernel_version="$1"
+
+    if [[ ! -f "/bundles/bundle-${kernel_version}.tgz" ]]; then
+        rm -rf /bundles/* 2> /dev/null || true
+        mkdir -p /bundles/
+        gsutil -m cp "gs://collector-support-public/stackrox-kernel-bundles/bundle-${kernel_version}.tgz" "/bundles/bundle-${kernel_version}.tgz"
+    fi
+}
+
 extract_bundle() {
     local kernel_version="$1"
 
@@ -65,6 +75,10 @@ build() {
         local module_version="${line[1]}"
         local probe_type="${line[2]}"
 
+        if ((OSCI_RUN)); then
+            download_bundle "${kernel_version}"
+        fi
+
         if ! extract_bundle "${kernel_version}"; then
             echo >&2 "Failed to extract kernel bundle for version '${kernel_version}'"
             exit 1
@@ -85,8 +99,10 @@ build() {
 }
 
 DOCKERIZED=${DOCKERIZED:-0}
+OSCI_RUN=${OSCI_RUN:-0}
 
 export DOCKERIZED
+export OSCI_RUN
 
 if ((DOCKERIZED)); then
     FAILURE_DIR="/FAILURES"

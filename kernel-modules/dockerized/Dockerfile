@@ -57,6 +57,9 @@ FROM rhel-8-base AS task-master
 ARG USE_KERNELS_FILE=false
 ENV USE_KERNELS_FILE=$USE_KERNELS_FILE
 
+ARG USE_REMOTE_BUCKET=false
+ENV USE_REMOTE_BUCKET=$USE_REMOTE_BUCKET
+
 COPY /bundles /bundles
 COPY /collector/kernel-modules/build/apply-blocklist.py /scripts
 COPY /collector/kernel-modules/BLOCKLIST /scripts

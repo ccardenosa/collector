@@ -60,6 +60,14 @@ for module_dir in /kobuild-tmp/versions-src/*/; do
         while IFS="" read -r kernel_version || [[ -n "$kernel_version" ]]; do
             process_driver "$kernel_version" "$module_dir"
         done < /KERNEL_VERSIONS
+    elif [[ "${USE_REMOTE_BUCKET,,}" == "true" ]]; then
+        while IFS="" read -r kernel_version; do
+            kernel_version="$(basename "${kernel_version}")"
+            kernel_version="${kernel_version%".tgz"}"
+            kernel_version="${kernel_version#"bundle-"}"
+
+            process_driver "$kernel_version" "$module_dir"
+        done < <(gsutil ls 'gs://collector-support-public/stackrox-kernel-bundles/bundle-*')
     else
         for bundle in /bundles/bundle-*.tgz; do
             kernel_version="${bundle%".tgz"}"
