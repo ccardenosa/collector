@@ -23,7 +23,10 @@ RUN ./extract-bundle.sh
 RUN echo "${collector_version}" > /COLLECTOR_VERSION
 RUN echo "${module_version}" > /bundle/kernel-modules/MODULE_VERSION.txt
 
+WORKDIR /go/src/github.com/stackrox/collector
 RUN if [[ "${collector_version}" == "xxx" ]]; then \
+     pwd; \
+     ls; \
      microdnf upgrade -y; \
      microdnf install -y git; \
      git describe --tags --abbrev=10 --dirty > /COLLECTOR_VERSION; \
