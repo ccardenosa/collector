@@ -71,6 +71,10 @@ function main() {
     # Export SNI_HOSTNAME and default it to sensor.stackrox
     export SNI_HOSTNAME="${SNI_HOSTNAME:-sensor.stackrox}"
 
+    # Get collector and module versions from files and set corresponding environment variables
+    export COLLECTOR_VERSION="$(cat /COLLECTOR_VERSION)"
+    export MODULE_VERSION="$(cat /kernel-modules/MODULE_VERSION.txt)"
+
     # Get the linux distribution and BUILD_ID and ID to identify kernel version (COS or RHEL)
     OS_DISTRO="$(get_distro)"
 
