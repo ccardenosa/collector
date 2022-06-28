@@ -17,33 +17,23 @@ RUN cp "${ROOT_DIR}/bundle.tar.gz" /
 RUN cp "${ROOT_DIR}/extract-bundle.sh" /bundle/
 RUN cp "${ROOT_DIR}"/scripts/* /
 
-RUN echo "${collector_version}" > /COLLECTOR_VERSION
-RUN echo "${module_version}" > /MODULE_VERSION
+WORKDIR /bundle
+RUN ./extract-bundle.sh
 
-RUN cat /MODULE_VERSION
+RUN echo "${collector_version}" > /COLLECTOR_VERSION
+RUN echo "${module_version}" > /bundle/kernel-modules/MODULE_VERSION.txt
 
 RUN if [[ "${collector_version}" == "xxx" ]]; then \
      microdnf upgrade -y; \
      microdnf install -y git; \
      git describe --tags --abbrev=10 --dirty > /COLLECTOR_VERSION; \
-     echo "collector_version= $collector_version"; \
     fi 
 
 RUN if [[ "${module_version}" == "xxx" ]]; then \
-     #module_version="$(cat "${ROOT_DIR}"/../../../kernel-modules/MODULE_VERSION)"; \
-     #cat "${ROOT_DIR}"/../../../kernel-modules/MODULE_VERSION > /MODULE_VERSION; \
-     cp "${ROOT_DIR}"/../../../kernel-modules/MODULE_VERSION /MODULE_VERSION; \
-     echo "module_version= $module_version"; \
+     cp "${ROOT_DIR}"/../../../kernel-modules/MODULE_VERSION /bundle/kernel-modules/MODULE_VERSION.txt; \
     fi 
 
-RUN cat /COLLECTOR_VERSION
-RUN cat /MODULE_VERSION
-
-WORKDIR /bundle
-RUN ./extract-bundle.sh
-
 FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
-
 
 ENV COLLECTOR_HOST_ROOT=/host
 
@@ -67,13 +57,6 @@ COPY --from=extracted_bundle /bundle/kernel-modules/ /kernel-modules/
 COPY --from=extracted_bundle /bundle/usr/local/lib/libsinsp-wrapper.so /usr/local/lib/
 COPY --from=extracted_bundle /bundle/usr/local/bin/collector /usr/local/bin/
 COPY --from=extracted_bundle /COLLECTOR_VERSION /
-COPY --from=extracted_bundle /MODULE_VERSION /kernel-modules/MODULE_VERSION.txt
-
-RUN cat /COLLECTOR_VERSION
-RUN cat /kernel-modules/MODULE_VERSION.txt
-
-ENV COLLECTOR_VERSION=${collector_version} \
-    MODULE_VERSION=${module_version}
 
 COPY final-step.sh /
 
