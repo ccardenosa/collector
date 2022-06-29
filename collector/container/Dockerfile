@@ -28,11 +28,11 @@ RUN if [[ "${collector_version}" == "xxx" ]]; then \
      microdnf upgrade -y; \
      microdnf install -y git; \
      git describe --tags --abbrev=10 --dirty > /COLLECTOR_VERSION; \
-    fi 
+    fi
 
 RUN if [[ "${module_version}" == "xxx" ]]; then \
      cp "${ROOT_DIR}"/../../../kernel-modules/MODULE_VERSION /bundle/kernel-modules/MODULE_VERSION.txt; \
-    fi 
+    fi
 
 FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 
