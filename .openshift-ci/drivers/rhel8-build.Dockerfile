@@ -17,7 +17,8 @@ COPY --from=tasks /rhel8-tasks /rhel8-tasks
 
 # For the time being, we will only build 5 drivers for testing
 # RUN /scripts/compile.sh < /rhel8-tasks
-RUN /scripts/compile.sh < <(head -n5 /rhel8-tasks)
+RUN head -n5 /rhel8-tasks > /aux-tasks && \
+    /scripts/compile.sh < /aux-tasks
 
 FROM registry.fedoraproject.org/fedora:36
 
