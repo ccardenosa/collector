@@ -13,7 +13,7 @@ COPY /kernel-modules/build/apply-blocklist.py /scripts/
 COPY /kernel-modules/BLOCKLIST /scripts/
 COPY /kernel-modules/dockerized/BLOCKLIST /scripts/dockerized/
 COPY /kernel-modules/KERNEL_VERSIONS /KERNEL_VERSIONS
-COPY /.openshiftci/drivers/task-splitter.py /scripts/
+COPY /.openshift-ci/drivers/task-splitter.py /scripts/
 
 COPY --from=patcher /kobuild-tmp/versions-src /kobuild-tmp/versions-src
 
