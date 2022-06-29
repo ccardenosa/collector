@@ -1,1 +1,2 @@
 FROM quay.io/stackrox-io/apollo-ci:collector-0.3.42
+
