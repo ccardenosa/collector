@@ -67,7 +67,7 @@ for module_dir in /kobuild-tmp/versions-src/*/; do
             kernel_version="${kernel_version#"bundle-"}"
 
             process_driver "$kernel_version" "$module_dir"
-        done < <(gsutil ls 'gs://collector-support-public/stackrox-kernel-bundles/bundle-*')
+        done < <(gsutil ls 'gs://collector-kernel-bundles-public/bundle-*')
     else
         for bundle in /bundles/bundle-*.tgz; do
             kernel_version="${bundle%".tgz"}"

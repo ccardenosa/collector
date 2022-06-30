@@ -16,7 +16,7 @@ download_bundle() {
     if [[ ! -f "/bundles/bundle-${kernel_version}.tgz" ]]; then
         rm -rf /bundles/* 2> /dev/null || true
         mkdir -p /bundles/
-        gsutil -m cp "gs://collector-support-public/stackrox-kernel-bundles/bundle-${kernel_version}.tgz" "/bundles/bundle-${kernel_version}.tgz"
+        gsutil -m cp "gs://collector-kernel-bundles-public/bundle-${kernel_version}.tgz" "/bundles/bundle-${kernel_version}.tgz"
     fi
 }
 
