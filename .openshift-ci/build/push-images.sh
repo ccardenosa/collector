@@ -3,5 +3,6 @@ set -eo pipefail
 
 oc registry login
 
-oc image mirror collector-full quay.io/rhacs-eng/collector:osci-test
 echo "COLLECTOR_BUILDER= $COLLECTOR_BUILDER"
+
+oc image mirror $COLLECTOR_BUILDER quay.io/rhacs-eng/collector:osci-test
